@@ -84,6 +84,10 @@ public class PaletteModeStrings : GlobalId
     internal const string DEFAULT_PALETTE_MATERIAL_DARK = @"Material - Dark";
     internal const string DEFAULT_PALETTE_MATERIAL_LIGHT_RIPPLE = @"Material - Light (Ripple)";
     internal const string DEFAULT_PALETTE_MATERIAL_DARK_RIPPLE = @"Material - Dark (Ripple)";
+    internal const string DEFAULT_PALETTE_ACRYLIC_LIGHT = @"Acrylic - Light";
+    internal const string DEFAULT_PALETTE_ACRYLIC_DARK = @"Acrylic - Dark";
+    internal const string DEFAULT_PALETTE_MICA_LIGHT = @"Mica - Light";
+    internal const string DEFAULT_PALETTE_MICA_DARK = @"Mica - Dark";
     internal const string DEFAULT_PALETTE_CUSTOM = @"Custom";
 
     #endregion
@@ -170,6 +174,10 @@ public class PaletteModeStrings : GlobalId
             { DEFAULT_PALETTE_MATERIAL_DARK, PaletteMode.MaterialDark },
             { DEFAULT_PALETTE_MATERIAL_LIGHT_RIPPLE, PaletteMode.MaterialLightRipple },
             { DEFAULT_PALETTE_MATERIAL_DARK_RIPPLE, PaletteMode.MaterialDarkRipple },
+            { DEFAULT_PALETTE_ACRYLIC_LIGHT, PaletteMode.AcrylicLight },
+            { DEFAULT_PALETTE_ACRYLIC_DARK, PaletteMode.AcrylicDark },
+            { DEFAULT_PALETTE_MICA_LIGHT, PaletteMode.MicaLight },
+            { DEFAULT_PALETTE_MICA_DARK, PaletteMode.MicaDark },
             { DEFAULT_PALETTE_CUSTOM, PaletteMode.Custom }
         });
 

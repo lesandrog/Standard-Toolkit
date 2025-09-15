@@ -125,6 +125,8 @@ public sealed class KryptonManager : Component
     private static RenderOffice2013? _renderOffice2013;
     private static RenderMicrosoft365? _renderMicrosoft365;
     private static RenderMaterial? _renderMaterial;
+    private static RenderAcrylic? _renderAcrylic;
+    private static RenderMica? _renderMica;
     private static RenderSparkle? _renderSparkle;
     private static RenderVisualStudio2010With2007? _renderVisualStudio2010With2007;
     private static RenderVisualStudio2010With2010? _renderVisualStudio2010With2010;
@@ -597,6 +599,14 @@ public sealed class KryptonManager : Component
                 return PaletteMaterialLightRipple;
             case PaletteMode.MaterialDarkRipple:
                 return PaletteMaterialDarkRipple;
+            case PaletteMode.AcrylicLight:
+                return PaletteAcrylicLight;
+            case PaletteMode.AcrylicDark:
+                return PaletteAcrylicDark;
+            case PaletteMode.MicaLight:
+                return PaletteMicaLight;
+            case PaletteMode.MicaDark:
+                return PaletteMicaDark;
 
             case PaletteMode.Custom:
             case PaletteMode.Global:
@@ -884,11 +894,19 @@ public sealed class KryptonManager : Component
     public static PaletteMaterialDark PaletteMaterialDark => _paletteMaterialDark ??= new PaletteMaterialDark();
     public static PaletteMaterialLightRipple PaletteMaterialLightRipple => _paletteMaterialLightRipple ??= new PaletteMaterialLightRipple();
     public static PaletteMaterialDarkRipple PaletteMaterialDarkRipple => _paletteMaterialDarkRipple ??= new PaletteMaterialDarkRipple();
+    public static PaletteAcrylicLight PaletteAcrylicLight => _paletteAcrylicLight ??= new PaletteAcrylicLight();
+    public static PaletteAcrylicDark PaletteAcrylicDark => _paletteAcrylicDark ??= new PaletteAcrylicDark();
+    public static PaletteMicaLight PaletteMicaLight => _paletteMicaLight ??= new PaletteMicaLight();
+    public static PaletteMicaDark PaletteMicaDark => _paletteMicaDark ??= new PaletteMicaDark();
 
     private static PaletteMaterialLight? _paletteMaterialLight;
     private static PaletteMaterialDark? _paletteMaterialDark;
     private static PaletteMaterialLightRipple? _paletteMaterialLightRipple;
     private static PaletteMaterialDarkRipple? _paletteMaterialDarkRipple;
+    private static PaletteAcrylicLight? _paletteAcrylicLight;
+    private static PaletteAcrylicDark? _paletteAcrylicDark;
+    private static PaletteMicaLight? _paletteMicaLight;
+    private static PaletteMicaDark? _paletteMicaDark;
 
     //public static PaletteBase CustomPaletteBase => _customPalette ??= new PaletteBase ();
 
@@ -965,6 +983,12 @@ public sealed class KryptonManager : Component
     /// Gets the single instance of the Material renderer.
     /// </summary>
     public static RenderMaterial RenderMaterial => _renderMaterial ??= new RenderMaterial();
+
+    /// <summary>
+    /// Gets the single instance of the Acrylic renderer.
+    /// </summary>
+    public static RenderAcrylic RenderAcrylic => _renderAcrylic ??= new RenderAcrylic();
+    public static RenderMica RenderMica => _renderMica ??= new RenderMica();
 
     /// <summary>
     /// Gets the single instance of the professional renderer.
@@ -1166,6 +1190,16 @@ public sealed class KryptonManager : Component
             case PaletteMode.MaterialLightRipple:
             case PaletteMode.MaterialDarkRipple:
                 // TODO create our own Material images
+                Images.ToolbarImages.SetToolBarImages(GlobalStaticValues.Microsoft365ToolBarImages);
+                break;
+            case PaletteMode.AcrylicLight:
+            case PaletteMode.AcrylicDark:
+                // Use Microsoft 365 images for acrylic themes
+                Images.ToolbarImages.SetToolBarImages(GlobalStaticValues.Microsoft365ToolBarImages);
+                break;
+            case PaletteMode.MicaLight:
+            case PaletteMode.MicaDark:
+                // Use Microsoft 365 images for mica themes
                 Images.ToolbarImages.SetToolBarImages(GlobalStaticValues.Microsoft365ToolBarImages);
                 break;
             default:

@@ -393,6 +393,26 @@ public enum PaletteMode
     MaterialDarkRipple,
 
     /// <summary>
+    /// Acrylic Light palette inspired by Windows 10 Fluent Design.
+    /// </summary>
+    AcrylicLight,
+
+    /// <summary>
+    /// Acrylic Dark palette inspired by Windows 10 Fluent Design.
+    /// </summary>
+    AcrylicDark,
+
+    /// <summary>
+    /// Mica Light palette inspired by Windows 11 Fluent Design.
+    /// </summary>
+    MicaLight,
+
+    /// <summary>
+    /// Mica Dark palette inspired by Windows 11 Fluent Design.
+    /// </summary>
+    MicaDark,
+
+    /// <summary>
     /// Specifies a custom palette be used.
     /// </summary>
     Custom
