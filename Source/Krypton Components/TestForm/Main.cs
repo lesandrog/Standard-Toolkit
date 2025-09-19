@@ -312,6 +312,8 @@ public partial class Main : KryptonForm
 
     private void kryptonButton5_Click(object sender, EventArgs e)
     {
+        var rtlTestForm = new RTLTestForm();
+        rtlTestForm.Show();
     }
 
     private void kryptonButton9_Click(object sender, EventArgs e)

@@ -207,7 +207,15 @@ public class ViewDrawDocker : ViewDrawCanvas
         ViewDockStyle ds = _childDocking[child!];
 
         // Apply RTL transformation if needed
-        return CalculateDockForRTL(ds);
+        ViewDockStyle result = CalculateDockForRTL(ds);
+        
+        // Debug: Show dock style transformations
+        if (ds != result)
+        {
+            System.Diagnostics.Debug.WriteLine($"RTL Dock Transform: {ds} -> {result}");
+        }
+        
+        return result;
     }
 
     /// <summary>

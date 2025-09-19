@@ -172,6 +172,9 @@ public class KryptonForm : VisualForm,
         // Content draws the text and icon inside the title bar
         _drawContent = new ViewDrawContent(StateActive.Header.Content, this, VisualOrientation.Top);
         _drawHeading.Add(_drawContent, ViewDockStyle.Fill);
+        
+        // Set initial content dock style based on RTL setting
+        UpdateContentDockStyle();
 
         // Create a decorator so that the heading has a fixed sized and not based on content
         _headingFixedSize = new ViewDecoratorFixedSize(_drawHeading, Size.Empty);
@@ -1515,6 +1518,30 @@ public class KryptonForm : VisualForm,
                     : base.GetContentShortTextH(style, state),
             _ => base.GetContentShortTextH(style, state)
         };
+
+        public override PaletteRelativeEdgeAlign GetButtonSpecEdge(PaletteButtonSpecStyle style)
+        {
+            PaletteRelativeEdgeAlign edge = base.GetButtonSpecEdge(style);
+
+            // Apply RTL transformation for form control buttons only when BOTH RTL and RTL Layout are enabled
+            // This matches WinForms behavior: RTL=true,RTLLayout=false should only align controls, not change layout
+            if (_kryptonForm.RightToLeft == RightToLeft.Yes && _kryptonForm.RightToLeftLayout)
+            {
+                // Debug: Add title to show this method is being called
+                System.Diagnostics.Debug.WriteLine($"RTL Button Edge Transform: {style} {edge} -> ");
+                
+                edge = edge switch
+                {
+                    PaletteRelativeEdgeAlign.Near => PaletteRelativeEdgeAlign.Far,
+                    PaletteRelativeEdgeAlign.Far => PaletteRelativeEdgeAlign.Near,
+                    _ => edge
+                };
+                
+                System.Diagnostics.Debug.WriteLine($"{edge}");
+            }
+
+            return edge;
+        }
     }
 
     /// <summary>
@@ -1601,13 +1628,37 @@ public class KryptonForm : VisualForm,
     }
 
     /// <summary>
+    /// Updates the content dock style based on RTL settings.
+    /// </summary>
+    private void UpdateContentDockStyle()
+    {
+        // Only change layout when BOTH RTL and RTL Layout are enabled
+        // This matches WinForms behavior: RTL=true,RTLLayout=false should only align controls, not change layout
+        // When RTL layout is enabled, dock content to left so it's on opposite side from control box buttons
+        ViewDockStyle contentDock = (RightToLeft == RightToLeft.Yes && RightToLeftLayout) ? ViewDockStyle.Left : ViewDockStyle.Fill;
+        _drawHeading.SetDock(_drawContent, contentDock);
+        
+        // Also ensure proper title alignment - in RTL mode with layout enabled, we want content on the far side
+        if (RightToLeft == RightToLeft.Yes && RightToLeftLayout && _formTitleAlign == PaletteRelativeAlign.Near)
+        {
+            // Temporarily override the alignment for better positioning
+            PerformNeedPaint(true);
+        }
+    }
+
+    /// <summary>
     /// Raises the RightToLeftChanged event.
     /// </summary>
     /// <param name="e">An EventArgs containing event data.</param>
     protected override void OnRightToLeftChanged(EventArgs e)
     {
         base.OnRightToLeftChanged(e);
+        
+        // Update title content dock style based on new RTL setting
+        UpdateContentDockStyle();
+        
         PerformNeedPaint(true);
+        _buttonManager.PerformNeedPaint(true);
     }
 
     /// <summary>
