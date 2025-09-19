@@ -204,7 +204,55 @@ public class ViewDrawDocker : ViewDrawCanvas
             _childDocking.Add(child!, ViewDockStyle.Top);
         }
 
-        return _childDocking[child!];
+        ViewDockStyle ds = _childDocking[child!];
+
+        // Apply RTL transformation if needed
+        return CalculateDockForRTL(ds);
+    }
+
+    /// <summary>
+    /// Calculate the dock style to use, taking into account RTL layout.
+    /// </summary>
+    /// <param name="ds">Original dock style.</param>
+    /// <returns>RTL-adjusted dock style.</returns>
+    protected ViewDockStyle CalculateDockForRTL(ViewDockStyle ds)
+    {
+        // Find the control that owns this view hierarchy
+        Control? control = FindControl();
+        if (control != null)
+        {
+            // Do we need to adjust to reflect right to left layout?
+            if (CommonHelper.GetRightToLeftLayout(control) && (control.RightToLeft == RightToLeft.Yes))
+            {
+                // Only need to invert the left and right sides
+                ds = ds switch
+                {
+                    ViewDockStyle.Left => ViewDockStyle.Right,
+                    ViewDockStyle.Right => ViewDockStyle.Left,
+                    _ => ds
+                };
+            }
+        }
+
+        return ds;
+    }
+
+    /// <summary>
+    /// Find the control that contains this view hierarchy.
+    /// </summary>
+    /// <returns>Control reference or null if not found.</returns>
+    protected Control? FindControl()
+    {
+        ViewBase? current = this;
+        while (current != null)
+        {
+            if (current.OwningControl != null)
+            {
+                return current.OwningControl;
+            }
+            current = current.Parent;
+        }
+        return null;
     }
 
     /// <summary>

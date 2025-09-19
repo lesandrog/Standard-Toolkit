@@ -321,6 +321,23 @@ public partial class Main : KryptonForm
         commandLinks.ShowDialog();
     }
 
+    private void TestRTLButton_Click(object sender, EventArgs e)
+    {
+        // Toggle RTL mode
+        if (RightToLeft == RightToLeft.No)
+        {
+            RightToLeft = RightToLeft.Yes;
+            RightToLeftLayout = true;
+        }
+        else
+        {
+            RightToLeft = RightToLeft.No;
+            RightToLeftLayout = false;
+        }
+        
+        AddEvent($"RTL Mode: {RightToLeft}, RTL Layout: {RightToLeftLayout}");
+    }
+
     private void kryptonColorButton1_SelectedColorChanged(object sender, ColorEventArgs e)
     {
         kryptonButton1.Values.DropDownArrowColor = e.Color;

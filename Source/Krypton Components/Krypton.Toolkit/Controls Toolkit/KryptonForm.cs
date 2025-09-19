@@ -568,6 +568,50 @@ public class KryptonForm : VisualForm,
         set => _internalKryptonPanel.StateCommon.ImageStyle = value;
     }
 
+    /// <summary>
+    /// Gets and sets the RightToLeft property.
+    /// </summary>
+    [Browsable(true)]
+    [DefaultValue(RightToLeft.No)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+    [Category(@"Appearance")]
+    [Description(@"Indicates whether the control's elements are aligned to support locales using right-to-left fonts.")]
+    public override RightToLeft RightToLeft
+    {
+        get => base.RightToLeft;
+        set
+        {
+            if (base.RightToLeft != value)
+            {
+                base.RightToLeft = value;
+                PerformNeedPaint(true);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets and sets the RightToLeftLayout property.
+    /// </summary>
+    [Browsable(true)]
+    [DefaultValue(false)]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+    [Category(@"Appearance")]
+    [Description(@"Indicates whether the form should be mirrored for right-to-left layout.")]
+    public override bool RightToLeftLayout
+    {
+        get => base.RightToLeftLayout;
+        set
+        {
+            if (base.RightToLeftLayout != value)
+            {
+                base.RightToLeftLayout = value;
+                PerformNeedPaint(true);
+            }
+        }
+    }
+
     /// <inheritdoc cref="Form" />
     public new void SuspendLayout()
     {
@@ -1553,6 +1597,16 @@ public class KryptonForm : VisualForm,
     protected override void OnTextChanged(EventArgs e)
     {
         base.OnTextChanged(e);
+        PerformNeedPaint(true);
+    }
+
+    /// <summary>
+    /// Raises the RightToLeftChanged event.
+    /// </summary>
+    /// <param name="e">An EventArgs containing event data.</param>
+    protected override void OnRightToLeftChanged(EventArgs e)
+    {
+        base.OnRightToLeftChanged(e);
         PerformNeedPaint(true);
     }
 
