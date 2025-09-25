@@ -14,9 +14,11 @@ public class CommandLinkImageValues : Storage, IContentValues
 {
     #region Instance Fields
     private bool _displayUACShield;
+    private bool _displayOSArrow;
     private Color _transparencyKey;
     private Image? _image;
     private IconSize _uacShieldIconSize;
+    private OSArrowDirection _arrowDirection;
     #endregion
 
     #region Identity
@@ -26,6 +28,8 @@ public class CommandLinkImageValues : Storage, IContentValues
     {
         NeedPaint = needPaint;
         _uacShieldIconSize = IconSize.Small;
+        _arrowDirection = OSArrowDirection.Right; // Default to right arrow for command links
+        _displayOSArrow = true; // Enable OS arrow by default for command links
     }
     #endregion
 
@@ -48,6 +52,24 @@ public class CommandLinkImageValues : Storage, IContentValues
     }
     private bool ShouldSerializeDisplayUACShield() => _displayUACShield;
     private void ResetDisplayUACShield() => DisplayUACShield = false;
+
+    [DefaultValue(true)]
+    [Description("Display the OS-dependent arrow image.")]
+    public bool DisplayOSArrow
+    {
+        get => _displayOSArrow;
+
+        set
+        {
+            if (_displayOSArrow != value)
+            {
+                _displayOSArrow = value;
+                ShowOSArrowImage(_arrowDirection, _uacShieldIconSize);
+            }
+        }
+    }
+    private bool ShouldSerializeDisplayOSArrow() => !_displayOSArrow;
+    private void ResetDisplayOSArrow() => DisplayOSArrow = true;
 
     /// <summary>Gets and sets the heading image transparent color.</summary>
     [Category("Visuals")]
@@ -88,11 +110,45 @@ public class CommandLinkImageValues : Storage, IContentValues
         set
         {
             _uacShieldIconSize = value;
-            ShowUACShieldImage(value);
+            if (_displayUACShield)
+            {
+                ShowUACShieldImage(value);
+            }
+            else if (_displayOSArrow)
+            {
+                ShowOSArrowImage(_arrowDirection, value);
+            }
+            else
+            {
+                // If neither is enabled, clear the image
+                _image = null;
+                PerformNeedPaint(true);
+            }
         }
     }
     private bool ShouldSerializeUACShieldIconSize() => _uacShieldIconSize != IconSize.Small;
     private void ResetUACShieldIconSize() => UACShieldIconSize = IconSize.Small;
+
+    [DefaultValue(typeof(OSArrowDirection), "Right")]
+    [Description("Direction of the OS-dependent arrow image.")]
+    public OSArrowDirection ArrowDirection
+    {
+        get => _arrowDirection;
+
+        set
+        {
+            if (_arrowDirection != value)
+            {
+                _arrowDirection = value;
+                if (_displayOSArrow)
+                {
+                    ShowOSArrowImage(_arrowDirection, _uacShieldIconSize);
+                }
+            }
+        }
+    }
+    private bool ShouldSerializeArrowDirection() => _arrowDirection != OSArrowDirection.Right;
+    private void ResetArrowDirection() => ArrowDirection = OSArrowDirection.Right;
 
     #endregion
 
@@ -103,15 +159,26 @@ public class CommandLinkImageValues : Storage, IContentValues
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public override bool IsDefault => (!ShouldSerializeDisplayUACShield()
+        && !ShouldSerializeDisplayOSArrow()
         && Image == null
         && !ShouldSerializeImageTransparentColor()
-        && !ShouldSerializeUACShieldIconSize());
+        && !ShouldSerializeUACShieldIconSize()
+        && !ShouldSerializeArrowDirection());
     #endregion
 
     #region Implementation
 
     /// <inheritdoc />
-    public Image? GetImage(PaletteState state) => Image;
+    public Image? GetImage(PaletteState state) 
+    {
+        // If OS arrow is enabled and we don't have an image yet, generate it
+        if (_displayOSArrow && !_displayUACShield && _image == null)
+        {
+            ShowOSArrowImage(_arrowDirection, _uacShieldIconSize);
+        }
+        
+        return Image;
+    }
 
     /// <inheritdoc />
     public Color GetImageTransparentColor(PaletteState state) => ImageTransparentColor;
@@ -139,6 +206,36 @@ public class CommandLinkImageValues : Storage, IContentValues
             };
 
             _image = GraphicsExtensions.ScaleImage(SystemIcons.Shield.ToBitmap(), new Size(size, size));
+        }
+        else if (_displayOSArrow)
+        {
+            // If UAC shield is disabled but OS arrow is enabled, show the arrow
+            ShowOSArrowImage(_arrowDirection, shieldIconSize);
+        }
+        else
+        {
+            _image = null;
+        }
+
+        // Force a repaint
+        PerformNeedPaint(true);
+    }
+
+    /// <summary>Shows the OS-dependent arrow image.</summary>
+    /// <param name="arrowDirection">Direction of the arrow.</param>
+    /// <param name="iconSize">Size of the arrow icon.</param>
+    private void ShowOSArrowImage(OSArrowDirection arrowDirection, IconSize iconSize)
+    {
+        if (_displayOSArrow && !_displayUACShield)
+        {
+            // Use our OSArrowImageHelper to get the appropriate arrow image
+            _image = OSArrowImageHelper.GetOSArrowImageOrDefault(arrowDirection, iconSize);
+        }
+        else if (_displayUACShield)
+        {
+            // If UAC shield is enabled, it takes precedence
+            ShowUACShieldImage(iconSize);
+            return;
         }
         else
         {

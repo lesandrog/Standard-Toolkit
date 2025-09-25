@@ -4386,6 +4386,31 @@ public class PaletteProfessionalSystem : PaletteBase
         return image;
     }
 
+    /// <summary>
+    /// Gets an OS-appropriate arrow image for the specified direction.
+    /// </summary>
+    /// <param name="direction">The arrow direction.</param>
+    /// <returns>The arrow image.</returns>
+    private static Image GetOSArrowImage(OSArrowDirection direction)
+    {
+        // Try to get OS-specific arrow image, fall back to embedded resources if needed
+        var osImage = OSArrowImageHelper.GetOSArrowImage(direction, IconSize.Small, IconSelectionStrategy.OSBased);
+        if (osImage != null)
+        {
+            return osImage;
+        }
+
+        // Fallback to original embedded resources
+        return direction switch
+        {
+            OSArrowDirection.Left => GenericProfessionalImageResources.ProfessionalArrowLeftButton,
+            OSArrowDirection.Right => GenericProfessionalImageResources.ProfessionalArrowRightButton,
+            OSArrowDirection.Up => GenericProfessionalImageResources.ProfessionalArrowUpButton,
+            OSArrowDirection.Down => GenericProfessionalImageResources.ProfessionalArrowDownButton,
+            _ => GenericProfessionalImageResources.ProfessionalArrowDownButton
+        };
+    }
+
     #endregion Implementation
 
     #region Tab Row Background
