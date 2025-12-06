@@ -95,6 +95,9 @@
 	<Compile Update="ButtonSpec\ButtonSpec.cs">
 	  <SubType>Component</SubType>
 	</Compile>
+	<Compile Update="General\SuggestionPopup.cs">
+	  <SubType>Form</SubType>
+	</Compile>
 	<Compile Update="Palette Builtin\Office 2007\Non Official Themes\PaletteOffice2007White.cs" />
 	<Compile Update="Palette Builtin\Office 2010\Non Official Themes\PaletteOffice2010White.cs" />
 	<Compile Update="Palette Builtin\Office 2013\Non Official Themes\PaletteOffice2013AccessLegacy.cs">
@@ -375,6 +378,11 @@
 	  <DesignTime>True</DesignTime>
 	  <AutoGen>True</AutoGen>
 	  <DependentUpon>VisualStudioRadioButtonImageResources.resx</DependentUpon>
+	</Compile>
+	<Compile Update="ResourceFiles\SearchBox\SearchBoxImageResources.Designer.cs">
+	  <DesignTime>True</DesignTime>
+	  <AutoGen>True</AutoGen>
+	  <DependentUpon>SearchBoxImageResources.resx</DependentUpon>
 	</Compile>
 	<Compile Update="ResourceFiles\SizeGripStyles\SizeGripStyleResources.Designer.cs">
 	  <DesignTime>True</DesignTime>
@@ -835,6 +843,10 @@
 	<EmbeddedResource Update="ResourceFiles\RadioButtons\VisualStudioRadioButtonImageResources.resx">
 	  <Generator>ResXFileCodeGenerator</Generator>
 	  <LastGenOutput>VisualStudioRadioButtonImageResources.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+	<EmbeddedResource Update="ResourceFiles\SearchBox\SearchBoxImageResources.resx">
+	  <Generator>ResXFileCodeGenerator</Generator>
+	  <LastGenOutput>SearchBoxImageResources.Designer.cs</LastGenOutput>
 	</EmbeddedResource>
 	<EmbeddedResource Update="ResourceFiles\SizeGripStyles\SizeGripStyleResources.resx">
 	  <Generator>ResXFileCodeGenerator</Generator>

@@ -17,6 +17,8 @@ internal partial class InternalSearchableExceptionWinFormsTreeView : UserControl
 
     private readonly List<TreeNode> _originalNodes = new List<TreeNode>();
 
+    private readonly List<string> _searchResults = new List<string>();
+
     #endregion
 
     #region Public
@@ -37,7 +39,7 @@ internal partial class InternalSearchableExceptionWinFormsTreeView : UserControl
 
     public TreeView Tree => etvExceptionOutline;
 
-    public KryptonTextBox SearchBox => ktxtSearchBox;
+    public KryptonTextBox SearchBox => iksbSearch;
 
     #endregion
 
@@ -58,6 +60,9 @@ internal partial class InternalSearchableExceptionWinFormsTreeView : UserControl
         InitializeComponent();
 
         kwlblResults.Text = KryptonManager.Strings.ExceptionDialogStrings.TypeToSearch;
+
+        etvExceptionOutline.DrawMode = TreeViewDrawMode.OwnerDrawText;
+        etvExceptionOutline.DrawNode += EtvExceptionOutline_DrawNode;
     }
 
     #endregion
@@ -68,11 +73,24 @@ internal partial class InternalSearchableExceptionWinFormsTreeView : UserControl
     {
         etvExceptionOutline.Populate(exception);
         _originalNodes.Clear();
+        _searchResults.Clear();
 
         foreach (TreeNode node in etvExceptionOutline.Nodes)
         {
             _originalNodes.Add((TreeNode)node.Clone());
+            
+            // Populate search results with all node text
+            foreach (TreeNode flattenedNode in FlattenTree(node))
+            {
+                if (!string.IsNullOrWhiteSpace(flattenedNode.Text) && !_searchResults.Contains(flattenedNode.Text))
+                {
+                    _searchResults.Add(flattenedNode.Text);
+                }
+            }
         }
+
+        // Setup search suggestions
+        iksbSearch.SetSearchSuggestions(_searchResults);
     }
 
     private void Search(string searchQueryText)
@@ -106,8 +124,6 @@ internal partial class InternalSearchableExceptionWinFormsTreeView : UserControl
 
             return;
         }
-
-        bsaClearSearch.Visible = !string.IsNullOrEmpty(searchText);
 
         // If searching
         foreach (TreeNode original in _originalNodes)
@@ -215,14 +231,53 @@ internal partial class InternalSearchableExceptionWinFormsTreeView : UserControl
         }
     }
 
-    private void ktxtSearchBox_TextChanged(object sender, EventArgs e)
+    private void iksbSearch_Search(object sender, SearchEventArgs e) => Search(e.SearchText);
+
+    private void EtvExceptionOutline_DrawNode(object? sender, DrawTreeNodeEventArgs e)
     {
-        Search(SearchBox.Text);
+        if (e.Node == null)
+        {
+            return;
+        }
 
-        bsaClearSearch.Visible = !string.IsNullOrEmpty(SearchBox.Text);
+        Color backColor = e.Node.BackColor;
+        Color foreColor = e.Node.ForeColor;
+        Font? nodeFont = e.Node.NodeFont;
+
+        if (backColor == Color.Empty)
+        {
+            backColor = etvExceptionOutline.BackColor;
+        }
+
+        if (foreColor == Color.Empty)
+        {
+            foreColor = etvExceptionOutline.ForeColor;
+        }
+
+        if (nodeFont == null)
+        {
+            nodeFont = etvExceptionOutline.Font;
+        }
+
+        TextFormatFlags flags = TextFormatFlags.GlyphOverhangPadding | TextFormatFlags.VerticalCenter | TextFormatFlags.Left;
+
+        if (e.State.HasFlag(TreeNodeStates.Selected))
+        {
+            backColor = SystemColors.Highlight;
+            foreColor = SystemColors.HighlightText;
+        }
+        else if (e.State.HasFlag(TreeNodeStates.Hot))
+        {
+            backColor = SystemColors.HotTrack;
+            foreColor = SystemColors.HighlightText;
+        }
+
+        Rectangle bounds = e.Bounds;
+        e.Graphics.FillRectangle(new SolidBrush(backColor), bounds);
+        TextRenderer.DrawText(e.Graphics, e.Node.Text, nodeFont, bounds, foreColor, flags);
+
+        e.DrawDefault = false;
     }
-
-    private void bsaClearSearch_Click(object sender, EventArgs e) => SearchBox.Clear();
 
     #endregion
 }

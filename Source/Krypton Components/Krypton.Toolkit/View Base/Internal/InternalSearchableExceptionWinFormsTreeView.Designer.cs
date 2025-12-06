@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            Krypton.Toolkit.SearchSuggestionColumnDefinition searchSuggestionColumnDefinition1 = new Krypton.Toolkit.SearchSuggestionColumnDefinition();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.etvExceptionOutline = new Krypton.Toolkit.InternalExceptionWinFormsTreeView();
             this.kwlblResults = new Krypton.Toolkit.KryptonWrapLabel();
-            this.ktxtSearchBox = new Krypton.Toolkit.KryptonTextBox();
-            this.bsaClearSearch = new Krypton.Toolkit.ButtonSpecAny();
+            this.iksbSearch = new Krypton.Toolkit.InternalKryptonSearchBox();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -42,7 +42,7 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.etvExceptionOutline, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.kwlblResults, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.ktxtSearchBox, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.iksbSearch, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -73,24 +73,22 @@
             this.kwlblResults.Text = "No matches found";
             this.kwlblResults.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // ktxtSearchBox
+            // iksbSearch
             // 
-            this.ktxtSearchBox.ButtonSpecs.Add(this.bsaClearSearch);
-            this.ktxtSearchBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ktxtSearchBox.Location = new System.Drawing.Point(5, 5);
-            this.ktxtSearchBox.Margin = new System.Windows.Forms.Padding(5);
-            this.ktxtSearchBox.Name = "ktxtSearchBox";
-            this.ktxtSearchBox.Size = new System.Drawing.Size(352, 23);
-            this.ktxtSearchBox.TabIndex = 6;
-            this.ktxtSearchBox.TextChanged += new System.EventHandler(this.ktxtSearchBox_TextChanged);
-            // 
-            // bsaClearSearch
-            // 
-            this.bsaClearSearch.Style = Krypton.Toolkit.PaletteButtonStyle.Standalone;
-            this.bsaClearSearch.Type = Krypton.Toolkit.PaletteButtonSpecStyle.PendantClose;
-            this.bsaClearSearch.UniqueName = "7bfa2bfe1deb43dd97ae731f010e3baf";
-            this.bsaClearSearch.Visible = false;
-            this.bsaClearSearch.Click += new System.EventHandler(this.bsaClearSearch_Click);
+            this.iksbSearch.AllowButtonSpecToolTips = true;
+            searchSuggestionColumnDefinition1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            searchSuggestionColumnDefinition1.DataPropertyName = "Suggestion";
+            searchSuggestionColumnDefinition1.HeaderText = "Suggestion";
+            searchSuggestionColumnDefinition1.Name = "Suggestion";
+            searchSuggestionColumnDefinition1.Width = 0;
+            this.iksbSearch.DataGridViewColumns.Add(searchSuggestionColumnDefinition1);
+            this.iksbSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.iksbSearch.Location = new System.Drawing.Point(5, 5);
+            this.iksbSearch.Margin = new System.Windows.Forms.Padding(5);
+            this.iksbSearch.Name = "iksbSearch";
+            this.iksbSearch.Size = new System.Drawing.Size(352, 23);
+            this.iksbSearch.TabIndex = 6;
+            this.iksbSearch.Search += new System.EventHandler<Krypton.Toolkit.SearchEventArgs>(this.iksbSearch_Search);
             // 
             // InternalSearchableExceptionWinFormsTreeView
             // 
@@ -111,7 +109,6 @@
         private TableLayoutPanel tableLayoutPanel2;
         private InternalExceptionWinFormsTreeView etvExceptionOutline;
         private KryptonWrapLabel kwlblResults;
-        private KryptonTextBox ktxtSearchBox;
-        private ButtonSpecAny bsaClearSearch;
+        private InternalKryptonSearchBox iksbSearch;
     }
 }

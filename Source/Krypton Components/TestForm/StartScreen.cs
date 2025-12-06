@@ -59,6 +59,8 @@ public partial class StartScreen : KryptonForm
         CreateButton("CommandLink Buttons", "No comment", typeof(CommandLinkButtons));
         CreateButton("Control Styles", string.Empty, typeof(ControlStylesForm));
         CreateButton("DateTime Example", string.Empty, typeof(DateTimeExample));
+        CreateButton("Dialogs Test", string.Empty, typeof(KryptonDialogExamples));
+        CreateButton("Exception Dialog Test", "Generate a test exception dialog", typeof(KryptonExeptionDialogTestForm));
         CreateButton("FormBorder Test", string.Empty, typeof(FormBorderTest));
         CreateButton("Header Examples", string.Empty, typeof(HeaderExamples));
         CreateButton("Menu/Tool/Status Strips", string.Empty, typeof(MenuToolBarStatusStripTest));
