@@ -11,11 +11,12 @@ on:
       - canary
       - V105-LTS
       - V85-LTS
+    workflow_dispatch:
 
 jobs:
   release-master:
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
 
     steps:
       # Release kill switch
@@ -251,7 +252,7 @@ jobs:
                   }
                   @{
                     name = "📦 NuGet Packages"
-                    value = "• [Krypton.Toolkit](https://www.nuget.org/packages/Krypton.Toolkit)`n• [Krypton.Ribbon](https://www.nuget.org/packages/Krypton.Ribbon)`n• [Krypton.Navigator](https://www.nuget.org/packages/Krypton.Navigator)`n• [Krypton.Workspace](https://www.nuget.org/packages/Krypton.Workspace)`n• [Krypton.Docking](https://www.nuget.org/packages/Krypton.Docking)`n• [Krypton.Standard.Toolkit](https://www.nuget.org/packages/Krypton.Standard.Toolkit)"
+                    value = "• [Krypton.Toolkit](https://www.nuget.org/packages/Krypton.Toolkit)`n• [Krypton.Ribbon](https://www.nuget.org/packages/Krypton.Ribbon)`n• [Krypton.Navigator](https://www.nuget.org/packages/Krypton.Navigator)`n• [Krypton.Workspace](https://www.nuget.org/packages/Krypton.Workspace)`n• [Krypton.Docking](https://www.nuget.org/packages/Krypton.Docking)`n• [Krypton.Standard.Toolkit](https://www.nuget.org/packages/Krypton.Standard.Toolkit)`n• [Krypton.Utilities](https://www.nuget.org/packages/Krypton.Utilities)"
                     inline = $false
                   }
                   @{
@@ -279,7 +280,7 @@ jobs:
 
   release-v105-lts:
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/V105-LTS' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/V105-LTS' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
 
     steps:
       # V105 Release kill switch
@@ -504,7 +505,7 @@ jobs:
 
   release-v85-lts:
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/V85-LTS' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/V85-LTS' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
 
     steps:
       # V85 Release kill switch
@@ -714,7 +715,7 @@ jobs:
 
   release-canary:
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/canary' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/canary' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
 
     steps:
       # Canary Release kill switch
@@ -950,7 +951,7 @@ jobs:
                   }
                   @{
                     name = "📦 NuGet Packages"
-                    value = "• [Krypton.Toolkit.Canary](https://www.nuget.org/packages/Krypton.Toolkit.Canary)`n• [Krypton.Ribbon.Canary](https://www.nuget.org/packages/Krypton.Ribbon.Canary)`n• [Krypton.Navigator.Canary](https://www.nuget.org/packages/Krypton.Navigator.Canary)`n• [Krypton.Workspace.Canary](https://www.nuget.org/packages/Krypton.Workspace.Canary)`n• [Krypton.Docking.Canary](https://www.nuget.org/packages/Krypton.Docking.Canary)`n• [Krypton.Standard.Toolkit.Canary](https://www.nuget.org/packages/Krypton.Standard.Toolkit.Canary)"
+                    value = "• [Krypton.Toolkit.Canary](https://www.nuget.org/packages/Krypton.Toolkit.Canary)`n• [Krypton.Ribbon.Canary](https://www.nuget.org/packages/Krypton.Ribbon.Canary)`n• [Krypton.Navigator.Canary](https://www.nuget.org/packages/Krypton.Navigator.Canary)`n• [Krypton.Workspace.Canary](https://www.nuget.org/packages/Krypton.Workspace.Canary)`n• [Krypton.Docking.Canary](https://www.nuget.org/packages/Krypton.Docking.Canary)`n• [Krypton.Standard.Toolkit.Canary](https://www.nuget.org/packages/Krypton.Standard.Toolkit.Canary)`n• [Krypton.Utilities.Canary](https://www.nuget.org/packages/Krypton.Utilities.Canary)"
                     inline = $false
                   }
                   @{
@@ -978,7 +979,7 @@ jobs:
 
   release-alpha:
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/alpha' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/alpha' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
 
     steps:
       # Nightly Release kill switch
