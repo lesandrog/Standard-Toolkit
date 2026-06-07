@@ -51,6 +51,17 @@ internal static class MaterialSelectionGlyphFactory
 		return new MaterialGlyphPalette(outline, primary, onPrimary, disabled);
 	}
 
+    /// <summary>
+    /// macOS themes use system blue for checked checkboxes, radio buttons, and menu checkmarks.
+    /// </summary>
+    internal static MaterialGlyphPalette FromMacOSScheme([System.Diagnostics.CodeAnalysis.DisallowNull] KryptonColorSchemeBase scheme)
+    {
+        var outline = scheme.ButtonNormalBorder;
+        var primary = scheme.ButtonNormalDefaultBack1;
+        var disabled = scheme.InputControlTextDisabled;
+        return new MaterialGlyphPalette(outline, primary, System.Drawing.Color.White, disabled);
+    }
+
     internal static System.Drawing.Image[] CreateCheckBoxStrip(MaterialGlyphPalette palette, System.Drawing.Size size)
     {
         return new System.Drawing.Image[]
